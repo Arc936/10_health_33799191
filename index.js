@@ -42,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // For CSS/JS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+
 // Create a session
 app.use(session({
     secret: 'somerandomstuff',
@@ -63,27 +64,53 @@ app.use('/', workoutRoutes)
 const userRoutes = require("./routes/users")
 app.use('/', userRoutes)
 
+const apiRoutes = require("./routes/api")
+app.use('/api', apiRoutes)
+
+// In index.js
+
+
 // 2. About Page
 app.get('/about', (req, res) => {
     res.render('about', { title: 'About Our App' });
 });
 
 app.get('/search', (req, res) => {
+    // Get the search term from the query parameter 'q'
     const query = req.query.q || '';
-    let results = [];
     
+    // Base SQL: Select all relevant columns from the exercise types table
+    let sql = `SELECT id, type_name, category, base_calorie_rate_per_min, description FROM excersize`;
+    
+    let queryParams = [];
+
+    // Check if a specific search term was provided
     if (query) {
-        const sql = `SELECT * FROM workouts WHERE activity_name LIKE ?`;
-        db.query(sql, [`%${query}%`], (err, rows) => {
-            if (err) {
-                console.error('Search Error:', err);
-            }
-            results = rows || [];
-            res.render('search', { title: 'Search Workouts', query: query, results: results });
-        });
-    } else {
-        res.render('search', { title: 'Search Workouts', query: query, results: results });
+        // Append a WHERE clause to filter results by name or category
+        sql += ` WHERE type_name LIKE ? OR category LIKE ?`;
+        
+        // Add the search term as parameters for filtering (using wildcards)
+        queryParams = [`%${query}%`, `%${query}%`];
     }
+    
+    // Optional: Add sorting
+    sql += ` ORDER BY type_name ASC`;
+
+    // Execute the final query
+    db.query(sql, queryParams, (err, rows) => {
+        if (err) {
+            console.error('Search Error:', err);
+            // Handle error gracefully
+            return res.status(500).send("Error loading exercise data.");
+        }
+        
+        // Send the results to the EJS template
+        res.render('search', { 
+            title: 'Search Exercise Library', 
+            query: query, 
+            results: rows 
+        });
+    });
 });
 
 

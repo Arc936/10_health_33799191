@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/header.ejs') %>
+    <style>
+        /* Optional basic table styling */
+        table { width: 90%; border-collapse: collapse; margin: 20px auto; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><%= title %></h1>
+        <p><a href="/">← Back to Home</a></p>
+        <form method="GET" action="/search">
+            <label for="search-query">Search Exercise Library:</label>
+            <input 
+                type="text" 
+                id="search-query" 
+                name="q" 
+                placeholder="e.g., Running, Cardio, Strength"
+                value="<%= query %>"
+                style="width: 300px; padding: 8px;"
+            >
+            <button type="submit">Search</button>
+        </form>
+
+        <hr>
+
+        <% if (results && results.length > 0) { %>
+            <h2>Found <%= results.length %> Exercise Types</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exercise ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Calories/Min</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% results.forEach(function(exercise) { %>
+                        <tr>
+                            <td><%= exercise.id %></td>
+                            <td><strong><%= exercise.type_name %></strong></td>
+                            <td><%= exercise.category %></td>
+                            <td><%= exercise.base_calorie_rate_per_min %></td>
+                            <td><%= exercise.description %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else if (query) { %>
+            <p>No results found for **<%= query %>**.</p>
+        <% } else { %>
+            <p>Use the search bar above to look up exercise types.</p>
+        <% } %>
+        
+    </div>
+</body>
+</html>
