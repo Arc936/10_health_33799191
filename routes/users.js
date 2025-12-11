@@ -137,7 +137,6 @@ router.post('/registered',
             }); 
         }
 
-        // --- B. Execute Registration Logic ---
         else { 
             const saltRounds = 10;
             const plainPassword = req.body.password;
@@ -149,8 +148,6 @@ router.post('/registered',
                 }
 
                 // 3. Store the user in the database.
-                // SQL is updated to only include the columns that exist: 
-                // username, email, and password_hash
                 const sqlquery = "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)";
                 
                 const userDetails = [
@@ -183,8 +180,6 @@ router.post('/registered',
 );
 
 router.get('/list', redirectLogin, function(req, res, next) {
-    // 💡 IMPORTANT: Explicitly select the columns you need, 
-    // omitting the sensitive 'hashedPassword' column.
     let sqlquery = "SELECT id, username, email FROM users";
     
     // Execute the SQL query

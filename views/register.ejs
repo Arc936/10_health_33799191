@@ -2,15 +2,33 @@
 <html>
   <head>
     <%- include('partials/header.ejs') %>
-    <title>Register for Health & Fitness Tracker</title>
-  </head>
+    </head>
   <body>
     <h1>Register for Health & Fitness Tracker</h1>
+
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
+        <h3>Registration Errors:</h3>
+        <ul>
+          <% errors.forEach(function(error) { %>
+            <li><%= error.msg %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+    <% if (typeof customError !== 'undefined') { %>
+        <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
+            <h3>Database Error:</h3>
+            <p><%= customError %></p>
+        </div>
+    <% } %>
+
     <form method="POST" action="registered">
         <p>Email: <input id="email" type="email" name="email" /></p>
         <p>Username: <input id="name" type="text" name="username" /></p>
         <p>password: <input id="password" type="password" name="password" /></p>
         <input type="submit" value="Register" />
-      </form>
+    </form>
   </body>
 </html>
