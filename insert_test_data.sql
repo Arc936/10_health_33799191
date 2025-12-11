@@ -1,5 +1,6 @@
 -- insert_test_data.sql
 -- Password: 'smiths' (for example, assuming it is plain text for the marker)
+USE health;
 
 INSERT INTO users (username, password_hash, email ) VALUES ('gold','$2b$10$5tu9sR.m0O4HwwiU0p64yueb7IRgfc7gHMkixy0dm7PWWsFUbSa5C','placeholder@gmail.com');
 
@@ -44,7 +45,7 @@ VALUES
 ('Team Sports (General)', 'Sport', 6.5, 'Participation in organized group sports like basketball or soccer.'),
 ('Functional Training', 'Hybrid', 7.0, 'Exercises that mimic real-life movements.');
 
--- You now have 20 total workout types in the table.
+
 
 CREATE USER IF NOT EXISTS 'health_app'@'localhost' IDENTIFIED BY 'qwertyuiop'; 
 GRANT ALL PRIVILEGES ON health_app.* TO 'health_app'@'localhost';

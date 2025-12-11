@@ -26,3 +26,11 @@ CREATE TABLE IF NOT EXISTS login_attempts (
     success BOOLEAN NOT NULL,
     PRIMARY KEY (attemptId)
 );
+
+CREATE TABLE IF NOT EXISTS excersize ( 
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type_name VARCHAR(100) NOT NULL UNIQUE, 
+    category VARCHAR(50) NOT NULL,  
+    base_calorie_rate_per_min DECIMAL(5, 2), 
+    description TEXT
+);
