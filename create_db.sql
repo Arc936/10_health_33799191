@@ -1,14 +1,15 @@
-CREATE DATABASE health;
+CREATE DATABASE IF NOT EXISTS health;
+
 USE health;
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    email VARCHAR(100) UNIQUE,
+    email VARCHAR(100) UNIQUE
 );
 
-CREATE TABLE workouts (
+CREATE TABLE IF NOT EXISTS workouts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     activity_name VARCHAR(100) NOT NULL,
@@ -18,7 +19,7 @@ CREATE TABLE workouts (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE login_attempts (
+CREATE TABLE IF NOT EXISTS login_attempts (
     attemptId INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
     attemptTime DATETIME DEFAULT CURRENT_TIMESTAMP,
