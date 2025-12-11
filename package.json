@@ -1,0 +1,21 @@
+{
+  "name": "10_health_12345678",
+  "version": "1.0.0",
+  "description": "Health and Fitness Coursework Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.6.1",
+    "ejs": "^3.1.9",
+    "express": "^4.22.1",
+    "express-session": "^1.18.2",
+    "express-validator": "^7.3.1",
+    "mysql2": "^3.6.5"
+  },
+  "author": "",
+  "license": "ISC"
+}
