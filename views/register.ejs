@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head>
+    <%- include('partials/header.ejs') %>
+    <title>Register for Health & Fitness Tracker</title>
+  </head>
+  <body>
+    <h1>Register for Health & Fitness Tracker</h1>
+    <form method="POST" action="registered">
+        <p>Email: <input id="email" type="email" name="email" /></p>
+        <p>Username: <input id="name" type="text" name="username" /></p>
+        <p>password: <input id="password" type="password" name="password" /></p>
+        <input type="submit" value="Register" />
+      </form>
+  </body>
+</html>

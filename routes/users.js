@@ -101,4 +101,101 @@ router.get('/audit',redirectLogin, function(req, res, next) {
         res.render("audit.ejs", { attempts: attempts });
     });
 });
+
+router.get('/register', function (req, res, next) {
+    res.render('register.ejs', { title: 'Register for Health & Fitness Tracker' })
+})
+
+// Ensure you have imported 'bcrypt' and 'express-validator' (check, validationResult)
+
+router.post('/registered',
+    // 1. Validation and Sanitization Middleware Array
+    [
+        check('email').isEmail().withMessage('Invalid email address.').normalizeEmail(), 
+        
+        check('username')
+            .isLength({ min: 5, max: 20}).withMessage('Username must be 5 to 20 characters.')
+            .trim().escape(), 
+            
+        check('password')
+            .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long.')
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+            .withMessage('Password must include uppercase, lowercase, number, and symbol.'),
+    ],
+    // 2. Main Route Handler
+    function (req, res, next) {
+        const errors = validationResult(req);
+        
+        // --- A. Handle Validation Errors ---
+        if (!errors.isEmpty()) {
+            console.log('Validation failed:', errors.array());
+            
+            // Pass the errors and title back to the register page for display
+            return res.render('./register', { 
+                title: 'Registration', 
+                errors: errors.array()
+            }); 
+        }
+
+        // --- B. Execute Registration Logic ---
+        else { 
+            const saltRounds = 10;
+            const plainPassword = req.body.password;
+            
+            bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
+                if (err) {
+                    console.error('Password hashing failed:', err);
+                    return next(err);
+                }
+
+                // 3. Store the user in the database.
+                // SQL is updated to only include the columns that exist: 
+                // username, email, and password_hash
+                const sqlquery = "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)";
+                
+                const userDetails = [
+                    req.body.username,
+                    req.body.email, 
+                    hashedPassword
+                ];
+                
+                db.query(sqlquery, userDetails, (dbError, result) => {
+                    if (dbError) {
+                        console.error('Database insertion error:', dbError);
+                        
+                        // Check for duplicate entry error (username or email already exists)
+                        if (dbError.code === 'ER_DUP_ENTRY') {
+                            // Render the register page with an error message
+                            return res.render('./register', {
+                                title: 'Registration Failed',
+                                customError: 'Username or email already exists. Please choose another.'
+                            });
+                        }
+                        return next(dbError); 
+                    }
+                    
+                    // 4. Success Response: Redirect to login page
+                    return res.redirect('./login'); 
+                });
+            });
+        }
+    }
+);
+
+router.get('/list', redirectLogin, function(req, res, next) {
+    // 💡 IMPORTANT: Explicitly select the columns you need, 
+    // omitting the sensitive 'hashedPassword' column.
+    let sqlquery = "SELECT id, username, email FROM users";
+    
+    // Execute the SQL query
+    db.query(sqlquery, (err, users) => {
+        if (err) {
+            console.error('Database error in /list:', err);
+            // Pass the error to the Express error handler
+            return next(err);
+        }
+
+        res.render("users_list", { users: users });
+    });
+});
 module.exports = router
