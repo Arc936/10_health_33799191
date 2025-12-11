@@ -1,0 +1,8 @@
+home=https://www.doc.gold.ac.uk/usr/443/
+about=https://www.doc.gold.ac.uk/usr/443/about
+login=https://www.doc.gold.ac.uk/usr/443/login
+search=https://www.doc.gold.ac.uk/usr/443/search
+workouts=https://www.doc.gold.ac.uk/usr/443/workout
+logout=https://www.doc.gold.ac.uk/usr/443/logout
+workoutlog=https://www.doc.gold.ac.uk/usr/443/workout-log
+audit=https://www.doc.gold.ac.uk/usr/443/audit
