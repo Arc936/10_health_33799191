@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS workouts (
     activity_name VARCHAR(100) NOT NULL,
     duration_minutes INT NOT NULL,
     calories_burned INT,
-    workout_date DATE DEFAULT CURRENT_DATE
+    workout_date DATETIME DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
