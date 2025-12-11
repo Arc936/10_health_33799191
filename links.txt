@@ -7,3 +7,4 @@ logout=https://www.doc.gold.ac.uk/usr/443/logout
 workoutlog=https://www.doc.gold.ac.uk/usr/443/workout-log
 audit=https://www.doc.gold.ac.uk/usr/443/audit
 register=https://www.doc.gold.ac.uk/usr/443/register
+list=https://www.doc.gold.ac.uk/usr/443/list
