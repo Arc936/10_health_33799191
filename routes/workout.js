@@ -23,7 +23,8 @@ router.get('/workout', redirectLogin, (req, res) => {
     const sql = `
         SELECT w.activity_name, w.duration_minutes, w.calories_burned, w.workout_date
         FROM workouts w
-        WHERE w.user_id = ?  /* <--- RESTRICTED TO CURRENT USER */
+        WHERE w.user_id = ?  
+        
         ORDER BY w.workout_date DESC, w.id DESC
     `;
 

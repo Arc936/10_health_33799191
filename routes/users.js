@@ -22,7 +22,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', function (req, res, next) {
-    res.render('login.ejs'); 
+    res.render('login.ejs', {
+        title: 'User Login' // Define the title variable here
+    }); 
 });
 
 function logLoginAttempt(username, success, callback) {
@@ -83,5 +85,20 @@ router.get('/logout', redirectLogin, (req,res) => {
     }
     res.send('you are now logged out. <a href='+'./'+'>Home</a>');
     })
-})
+});
+
+router.get('/audit',redirectLogin, function(req, res, next) {
+    // Select all fields from the audit table, ordered by time (most recent first)
+    const sqlquery = "SELECT username, attemptTime, success FROM login_attempts ORDER BY attemptTime DESC";
+    
+    db.query(sqlquery, (err, attempts) => {
+        if (err) {
+            console.error('Database error in /users/audit:', err);
+            return next(err);
+        }
+        
+        // Render the new view/template page, passing the list of attempts
+        res.render("audit.ejs", { attempts: attempts });
+    });
+});
 module.exports = router
